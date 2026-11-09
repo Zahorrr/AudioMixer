@@ -1,13 +1,13 @@
 #!/bin/bash
-# ./build.sh          -> compile build/AudioMixer.app (architecture du Mac)
-# ./build.sh install  -> compile + installe dans /Applications + lance
-# ./build.sh pkg      -> compile en universel (Apple Silicon + Intel) + crée dist/AudioMixer-<version>.pkg
+# scripts/build.sh          -> compile build/AudioMixer.app (architecture du Mac)
+# scripts/build.sh install  -> compile + installe dans /Applications + lance
+# scripts/build.sh pkg      -> compile en universel (Apple Silicon + Intel) + crée dist/AudioMixer.pkg
 set -euo pipefail
-cd "$(dirname "$0")"
+cd "$(dirname "$0")/.."
 
 MODE="${1:-}"
 APP=build/AudioMixer.app
-VERSION=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" Info.plist)
+VERSION=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" Resources/Info.plist)
 
 rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
@@ -23,7 +23,7 @@ for arch in "${ARCHS[@]}"; do
 done
 lipo -create "${BINS[@]}" -output "$APP/Contents/MacOS/AudioMixer"
 
-cp Info.plist "$APP/Contents/Info.plist"
+cp Resources/Info.plist "$APP/Contents/Info.plist"
 cp Resources/AppIcon.icns "$APP/Contents/Resources/AppIcon.icns"
 codesign --force --sign - "$APP"
 echo "✅ $APP ($(lipo -archs "$APP/Contents/MacOS/AudioMixer"))"
@@ -57,7 +57,7 @@ if [[ "$MODE" == "pkg" ]]; then
     --identifier io.github.zahorrr.AudioMixer \
     --version "$VERSION" \
     --install-location /Applications \
-    --scripts pkg-scripts \
-    "dist/AudioMixer-$VERSION.pkg"
-  echo "✅ dist/AudioMixer-$VERSION.pkg"
+    --scripts scripts/pkg \
+    dist/AudioMixer.pkg
+  echo "✅ dist/AudioMixer.pkg (v$VERSION)"
 fi

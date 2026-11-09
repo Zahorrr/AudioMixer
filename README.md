@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="Resources/icon.png" width="160" alt="AudioMixer icon">
+  <img src=".github/assets/icon.png" width="160" alt="AudioMixer icon">
 </p>
 
 <h1 align="center">AudioMixer</h1>
@@ -17,7 +17,7 @@
 </p>
 
 <p align="center">
-  <img src="docs/screenshot.png" width="720" alt="AudioMixer screenshot">
+  <img src=".github/assets/screenshot.png" width="720" alt="AudioMixer screenshot">
 </p>
 
 ---
@@ -79,8 +79,8 @@ Requires the Xcode Command Line Tools (`xcode-select --install`).
 ```bash
 git clone https://github.com/Zahorrr/AudioMixer.git
 cd AudioMixer
-./build.sh install   # build for this Mac, install in /Applications, launch
-./build.sh pkg       # universal build + dist/AudioMixer-<version>.pkg
+scripts/build.sh install   # build for this Mac, install in /Applications, launch
+scripts/build.sh pkg       # universal build + dist/AudioMixer.pkg
 ```
 
 | File | Role |
@@ -90,7 +90,8 @@ cd AudioMixer
 | `Sources/MixerView.swift` | SwiftUI mixer: vertical faders, meters, mute buttons |
 | `Sources/CoreAudioHelpers.swift` | Core Audio property helpers, process → app resolution |
 | `Sources/AudioMixerApp.swift` | Menu bar item, popover, right-click menu |
-| `build.sh` · `pkg-scripts/` | `swiftc` build, ad-hoc signing, install, `.pkg` packaging |
+| `Resources/` | `Info.plist` and app icon |
+| `scripts/` | `swiftc` build, ad-hoc signing, install, `.pkg` packaging |
 
 ## Known limitations
 
