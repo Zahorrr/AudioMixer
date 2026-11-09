@@ -138,6 +138,15 @@ final class MixerModel: ObservableObject {
         refreshApps()
     }
 
+    func unhide(_ id: String) {
+        hidden.remove(id)
+        save()
+        refreshApps()
+    }
+
+    /// Ouvre la fenêtre de réglages (branché par AppDelegate).
+    var openSettings: (() -> Void)?
+
     func unhideAll() {
         hidden.removeAll()
         save()

@@ -4,16 +4,20 @@ import SwiftUI
 @main
 struct AudioMixerApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var delegate
-    var body: some Scene { Settings { EmptyView() } }
+    // ⌘, depuis le menu de l'app
+    var body: some Scene { Settings { SettingsView().environmentObject(delegate.model) } }
 }
 
 /// Icône de barre de menus : clic gauche = mélangeur, clic droit (ou ctrl-clic) = menu.
 final class AppDelegate: NSObject, NSApplicationDelegate {
-    private let model = MixerModel()
+    let model = MixerModel()
     private var statusItem: NSStatusItem!
     private let popover = NSPopover()
+    private var settingsWindow: NSWindow?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        model.openSettings = { [weak self] in self?.openSettings() }
+
         let host = NSHostingController(rootView: MixerView().environmentObject(model))
         host.sizingOptions = .preferredContentSize
         popover.contentViewController = host
@@ -52,6 +56,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         popover.performClose(nil)
         let menu = NSMenu()
 
+        menu.addItem(withTitle: model.t("Settings…", "Réglages…"), action: #selector(openSettings), keyEquivalent: ",").target = self
+
         let languages = NSMenu()
         for (lang, title) in [(MixerModel.Language.en, "English"), (.fr, "Français")] {
             let item = languages.addItem(withTitle: title, action: #selector(setLanguage(_:)), keyEquivalent: "")
@@ -73,6 +79,23 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     @objc private func setLanguage(_ sender: NSMenuItem) {
         guard let raw = sender.representedObject as? String, let lang = MixerModel.Language(rawValue: raw) else { return }
         model.language = lang
+    }
+
+    /// Fenêtre de réglages gérée ici : depuis macOS 14, SwiftUI n'ouvre plus la scène Settings
+    /// depuis du code AppKit (clic droit, bouton du mixeur).
+    @objc private func openSettings() {
+        popover.performClose(nil)
+        if settingsWindow == nil {
+            let host = NSHostingController(rootView: SettingsView().environmentObject(model))
+            let window = NSWindow(contentViewController: host)
+            window.styleMask = [.titled, .closable]
+            window.isReleasedWhenClosed = false
+            window.center()
+            settingsWindow = window
+        }
+        settingsWindow?.title = model.t("AudioMixer Settings", "Réglages d'AudioMixer")
+        NSApp.activate()
+        settingsWindow?.makeKeyAndOrderFront(nil)
     }
 
     @objc private func quit() { NSApp.terminate(nil) }

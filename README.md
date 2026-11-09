@@ -59,8 +59,9 @@ The `curl` install above doesn't trigger this warning.
 - **Clean list** — helper processes (Chrome, Claude, Electron apps, Safari's WebKit…) are grouped under their app, system processes are hidden, and you can hide any app with a right click
 - **Remembers your levels** per app and re-applies them at launch
 - **Zero impact at 100 %** — untouched apps are never re-routed, so no added latency
-- Left click the menu bar icon to open the mixer · right click for **Language** (English / Français) and **Quit**
-- **Launches at login** by default (can be turned off in the mixer)
+- Left click the menu bar icon to open the mixer · right click for **Settings**, **Language** (English / Français) and **Quit**
+- **Settings window** — language, launch at login, maximum boost, and hidden apps you can bring back one by one
+- **Launches at login** by default
 
 ## How it works
 
@@ -89,7 +90,8 @@ scripts/build.sh pkg       # universal build + dist/AudioMixer.pkg
 | `Sources/MixerModel.swift` | App discovery & filtering, per-app state, tap lifecycle, persistence, language |
 | `Sources/MixerView.swift` | SwiftUI mixer: vertical faders, meters, mute buttons |
 | `Sources/CoreAudioHelpers.swift` | Core Audio property helpers, process → app resolution |
-| `Sources/AudioMixerApp.swift` | Menu bar item, popover, right-click menu |
+| `Sources/AudioMixerApp.swift` | Menu bar item, popover, right-click menu, settings window |
+| `Sources/SettingsView.swift` | Settings: language, launch at login, boost, hidden apps |
 | `Resources/` | `Info.plist` and app icon |
 | `scripts/` | `swiftc` build, ad-hoc signing, install, `.pkg` packaging |
 

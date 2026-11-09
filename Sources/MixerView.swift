@@ -44,6 +44,11 @@ struct MixerView: View {
             Image(systemName: "slider.vertical.3")
             Text(m.t("Volume Mixer", "Mélangeur de volume")).font(.system(size: 13, weight: .semibold))
             Spacer()
+            Button { m.openSettings?() } label: {
+                Image(systemName: "gearshape").font(.system(size: 13)).foregroundStyle(.secondary)
+            }
+            .buttonStyle(.plain)
+            .help(m.t("Settings", "Réglages"))
         }
         .padding(.horizontal, 14).padding(.vertical, 10)
     }
