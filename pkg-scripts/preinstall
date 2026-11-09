@@ -1,0 +1,4 @@
+#!/bin/bash
+# Ferme AudioMixer s'il tourne (mise à jour)
+pkill -x AudioMixer 2>/dev/null || true
+exit 0

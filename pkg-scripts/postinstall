@@ -1,0 +1,7 @@
+#!/bin/bash
+# Lance AudioMixer dans la session de l'utilisateur connecté
+USER_NAME=$(stat -f%Su /dev/console)
+if [[ -n "$USER_NAME" && "$USER_NAME" != "root" ]]; then
+  launchctl asuser "$(id -u "$USER_NAME")" sudo -u "$USER_NAME" open -a /Applications/AudioMixer.app || true
+fi
+exit 0
